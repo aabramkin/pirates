@@ -24,11 +24,15 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
         if(prices.isEmpty()) {
             return null;
         }
+        LOGGER.info("Calculate asks");
         List<PriceSource> sources = new ArrayList<PriceSource>(prices);
         Collections.sort(sources, this);
         Set<Purchase> purchases = new HashSet<Purchase>();
         int currentQuantity = quantity;
-        while (currentQuantity > 0 || !sources.isEmpty()) {
+        while (currentQuantity > 0) {
+            if (sources.isEmpty()) {
+                break;
+            }
             PriceSource source = sources.remove(0);
             int quantity = source.getMaxQuantityForAsk(currentQuantity);
             if(quantity > 0) {
@@ -40,6 +44,9 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
                 currentQuantity -= quantity;
                 LOGGER.info(purchase.toString());
             }
+        }
+        if (currentQuantity > 0) {
+            return null;
         }
         Purchases result = new Purchases(quantity);
         result.setPurchases(purchases);

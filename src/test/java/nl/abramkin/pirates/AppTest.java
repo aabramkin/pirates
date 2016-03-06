@@ -1,8 +1,6 @@
 package nl.abramkin.pirates;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import junit.framework.*;
 
 /**
  * Unit test for simple App.
@@ -35,6 +33,20 @@ public class AppTest
     {
         final String path = "sources.csv";
         JackSparrowHelper helper = JackSparrowHelperImpl.getInstance();
-        assertNull(helper.helpJackSparrow(path, 555));
+
+        Purchases purchases = helper.helpJackSparrow(path, 555);
+        assertTrue(purchases.calculateAveragePrice().intValue() == 51);
+
+        purchases = helper.helpJackSparrow(path, 500);
+        assertTrue(purchases.calculateAveragePrice() == 50.7);
+
+        purchases = helper.helpJackSparrow(path, 10);
+        assertTrue(purchases.calculateAveragePrice().intValue() == 50);
+
+        purchases = helper.helpJackSparrow(path, 0);
+        assertTrue(purchases.getPurchases().isEmpty());
+
+        purchases = helper.helpJackSparrow(path, 1000);
+        assertNull(purchases);
     }
 }

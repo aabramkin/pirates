@@ -28,6 +28,7 @@ public class PriceStorage implements IPriceStorage {
         priceSources = null;
         File cvsData = new File(path);
         try {
+            LOGGER.info("Parse prices");
             CSVParser parser = CSVParser.parse(cvsData, Charset.defaultCharset(), CSVFormat.EXCEL.withDelimiter(';'));
             for(CSVRecord record : parser) {
                 try {
@@ -41,6 +42,7 @@ public class PriceStorage implements IPriceStorage {
                             setMinSize(Integer.parseInt(record.get(3))).
                             setStepSize(Integer.parseInt(record.get(4))).build();
                     sources.add(priceSource);
+                    LOGGER.info(priceSource.toString());
                 } catch (NumberFormatException e) {
                     LOGGER.error(e.getMessage());
                 }

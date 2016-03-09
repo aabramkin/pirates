@@ -48,5 +48,8 @@ public class AppTest
 
         purchases = helper.helpJackSparrow(path, 1000);
         assertNull(purchases);
+
+        purchases = helper.helpJackSparrow(path, 200);
+        assertTrue(purchases.calculateAveragePrice() == 50.5);
     }
 }

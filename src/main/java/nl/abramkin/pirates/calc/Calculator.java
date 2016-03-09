@@ -20,8 +20,8 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
         this.prices = new ArrayList<PriceSource>(prices);
     }
 
-    public Purchases calculate(){
-        if(prices.isEmpty()) {
+    public Purchases calculate() {
+        if (prices.isEmpty()) {
             return null;
         }
         LOGGER.info("Calculate asks");
@@ -35,7 +35,7 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
             }
             PriceSource source = sources.remove(0);
             int quantity = source.getMaxQuantityForAsk(currentQuantity);
-            if(quantity > 0) {
+            if (quantity > 0) {
                 Purchase purchase = new Purchase();
                 purchase.setNumberOfGallons(quantity);
                 purchase.setSourceName(source.getName());
@@ -55,16 +55,16 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
 
     public int compare(PriceSource o1, PriceSource o2) {
         if (o1.getAvgPrice() != o2.getAvgPrice()) {
-            return  o1.getAvgPrice() < o2.getAvgPrice() ? -1 : 1;
+            return o1.getAvgPrice() < o2.getAvgPrice() ? -1 : 1;
         }
         if (o1.getMinSize() != o2.getMinSize()) {
-            return  o1.getMinSize() < o2.getMinSize() ? -1 : 1;
+            return o1.getMinSize() < o2.getMinSize() ? -1 : 1;
         }
         if (o1.getSize() != o2.getSize()) {
-            return  o1.getSize() < o2.getSize() ? -1 : 1;
+            return o1.getSize() < o2.getSize() ? -1 : 1;
         }
         if (o1.getStepSize() != o2.getStepSize()) {
-            return  o1.getStepSize() < o2.getStepSize() ? -1 : 1;
+            return o1.getStepSize() < o2.getStepSize() ? -1 : 1;
         }
         return o1.getName().compareTo(o2.getName());
     }

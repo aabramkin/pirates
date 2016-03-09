@@ -21,7 +21,7 @@ public class JackSparrowHelperImpl implements JackSparrowHelper {
 
     public Purchases helpJackSparrow(String pathToPrices, int numberOfGallons) {
         IPriceStorage storage = new PriceStorage(pathToPrices);
-        ICalculator calculator = new Calculator(numberOfGallons, storage.getPriceSources());
-        return calculator.calculate();
+        ICalculator calculator = CalculatorFactory.get(numberOfGallons, storage.getPriceSources(), CalculatorFactory.TYPE_FAIRLY_CALCULATOR);
+        return calculator != null ? calculator.calculate() : null;
     }
 }

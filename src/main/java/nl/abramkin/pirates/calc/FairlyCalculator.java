@@ -9,21 +9,16 @@ import java.util.*;
 /**
  * Created by aabramkin on 09/03/16.
  */
-public class FairlyCalculator implements ICalculator, Comparator<PriceSource> {
+public class FairlyCalculator extends AbstractCalculator implements Comparator<PriceSource> {
     private static final Logger LOGGER = LoggerFactory.getLogger(FairlyCalculator.class);
 
-    private final int quantity;
-    private final List<PriceSource> prices;
     private Double minPrice;
     private Purchases minPurchases;
 
-    public FairlyCalculator(int quantity, List<PriceSource> prices) {
-        this.quantity = quantity;
-        this.prices = new ArrayList<PriceSource>(prices);
-    }
-
     public Purchases calculate() {
-        ArrayList<PriceSource> prices = new ArrayList<PriceSource>(this.prices);
+        minPrice = null;
+        minPurchases = null;
+        ArrayList<PriceSource> prices = new ArrayList<PriceSource>(getPrices());
         Collections.sort(prices, this);
         permute(prices, 0);
         if (minPurchases == null)
@@ -58,7 +53,7 @@ public class FairlyCalculator implements ICalculator, Comparator<PriceSource> {
 
     private Purchases getPurchasesFromSources(List<PriceSource> sources) {
         Set<Purchase> purchases = new HashSet<Purchase>();
-        int currentQuantity = quantity;
+        int currentQuantity = getQuantity();
         for (PriceSource source : sources) {
             if (currentQuantity <= 0) {
                 break;
@@ -76,7 +71,7 @@ public class FairlyCalculator implements ICalculator, Comparator<PriceSource> {
         if (currentQuantity != 0) {
             return null;
         }
-        Purchases result = new Purchases(quantity);
+        Purchases result = new Purchases(getQuantity());
         result.setPurchases(purchases);
         return result;
     }

@@ -9,26 +9,18 @@ import java.util.*;
 /**
  * Created by aabramkin on 05/03/16.
  */
-public class Calculator implements ICalculator, Comparator<PriceSource> {
+public class Calculator extends AbstractCalculator implements Comparator<PriceSource> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Calculator.class);
 
-    private final int quantity;
-    private final List<PriceSource> prices;
-
-    public Calculator(int quantity, List<PriceSource> prices) {
-        this.quantity = quantity;
-        this.prices = new ArrayList<PriceSource>(prices);
-    }
-
-    public Purchases calculate() {
-        if (prices.isEmpty()) {
+    protected Purchases calculate() {
+        if (getPrices().isEmpty()) {
             return null;
         }
         LOGGER.info("Calculate asks");
-        List<PriceSource> sources = new ArrayList<PriceSource>(prices);
+        List<PriceSource> sources = new ArrayList<PriceSource>(getPrices());
         Collections.sort(sources, this);
         Set<Purchase> purchases = new HashSet<Purchase>();
-        int currentQuantity = quantity;
+        int currentQuantity = getQuantity();
         while (currentQuantity > 0) {
             if (sources.isEmpty()) {
                 break;
@@ -48,7 +40,7 @@ public class Calculator implements ICalculator, Comparator<PriceSource> {
         if (currentQuantity > 0) {
             return null;
         }
-        Purchases result = new Purchases(quantity);
+        Purchases result = new Purchases(getQuantity());
         result.setPurchases(purchases);
         return result;
     }

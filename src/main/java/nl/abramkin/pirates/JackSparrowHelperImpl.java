@@ -1,27 +1,24 @@
 package nl.abramkin.pirates;
 
-import nl.abramkin.pirates.calc.*;
+import nl.abramkin.pirates.calc.ICalculator;
 import nl.abramkin.pirates.storage.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by aabramkin on 05/03/16.
  */
+@Component
 public class JackSparrowHelperImpl implements JackSparrowHelper {
-    private static JackSparrowHelper instance = null;
+    final private ICalculator calculator;
 
-    private JackSparrowHelperImpl() {
-    }
-
-    public static synchronized JackSparrowHelper getInstance() {
-        if (instance == null) {
-            instance = new JackSparrowHelperImpl();
-        }
-        return instance;
+    @Autowired
+    public JackSparrowHelperImpl(ICalculator calculator) {
+        this.calculator = calculator;
     }
 
     public Purchases helpJackSparrow(String pathToPrices, int numberOfGallons) {
         IPriceStorage storage = new PriceStorage(pathToPrices);
-        ICalculator calculator = CalculatorFactory.get(numberOfGallons, storage.getPriceSources(), CalculatorFactory.TYPE_FAIRLY_CALCULATOR);
-        return calculator != null ? calculator.calculate() : null;
+        return calculator != null ? calculator.calculate(numberOfGallons, storage.getPriceSources()) : null;
     }
 }
